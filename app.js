@@ -10,9 +10,14 @@ const { marshall, unmarshall } = require('@aws-sdk/util-dynamodb');
 
 const client = new DynamoDBClient();
 
-const getAllCertificates = async (event) => {
+const getCertificate = async (event) => {
   const response = { statusCode: 200 };
   try {
+    // Check if empID is defined in event.pathParameters
+    if (!event.pathParameters || !event.pathParameters.empID) {
+      throw new Error('empID is missing in the path parameters');
+    }
+
     const params = {
       TableName: process.env.DYNAMODB_TABLE_NAME,
       Key: marshall({ empID: event.pathParameters.empID }),
@@ -129,7 +134,7 @@ const getAllCertificates = async (event) => {
 //   return response;
 // };
 
-const getCertificate = async () => {
+const getAllCertificates = async () => {
   const response = { statusCode: 200 };
   try {
     const { Items } = await client.send(
