@@ -11,7 +11,7 @@ custom:
 plugins:
   - serverless-iam-roles-per-function
 functions: 
-  getCertificateDetails:
+  getCertificates:
     handler: app.getAllCertificates
     name: get-AllCertificate
     memorySize: 128 #mb
