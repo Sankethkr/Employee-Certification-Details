@@ -24,6 +24,7 @@ functions:
       - Effect: "Allow"
         Action: 
           - "dynamodb:GetItem"
+          - "dynamodb:Scan"  # Add this line to grant Scan permission
         Resource: !GetAtt EmployCertificate.Arn
   getDetail:
     handler: app.getCertificate
@@ -38,6 +39,7 @@ functions:
       - Effect: "Allow"
         Action:
           - "dynamodb:GetItem"
+          - "dynamodb:Scan"  # Add this line to grant Scan permission
         Resource: !GetAtt EmployCertificate.Arn
 resources: 
   Resources:
