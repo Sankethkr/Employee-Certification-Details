@@ -5,7 +5,7 @@ provider:
   runtime: nodejs18.x
   stage: dev
   environment:
-    DYNAMODB_TABLE_NAME: ${self:custonm.EmployeCertificationTable}
+    DYNAMODB_TABLE_NAME: ${self:custom.EmployeCertificationTable}
 custom:
   EmployeCertificationTable: EmployeeDetailsTable
 plugins:
