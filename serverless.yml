@@ -12,8 +12,8 @@ plugins:
   - serverless-iam-roles-per-function
 functions: 
   getCertificateDetails:
-    handler: app.getEmployeeCertificate
-    name: get-EmployeeCertificate
+    handler: app.getAllCertificates
+    name: get-AllCertificate
     memorySize: 128 #mb
     timeout: 5 # seconds
     events:
@@ -24,10 +24,10 @@ functions:
       - Effect: "Allow"
         Action: 
           - "dynamodb:GetItem"
-        Resource: !GetAtt EmployCertificateDetails.Arn
+        Resource: !GetAtt EmployCertificate.Arn
   getDetail:
-    handler: api.getCertificateDetail
-    name: get-CertificateDetail
+    handler: api.getCertificate
+    name: get-Certificate
     memorySize: 128 # mb
     timeout: 5 # seconds
     events:
@@ -38,7 +38,7 @@ functions:
       - Effect: "Allow"
         Action:
           - "dynamodb:GetItem"
-        Resource: !GetAtt EmployCertificateDetails.Arn
+        Resource: !GetAtt EmployCertificate.Arn
 resources: 
   Resources:
     EmployCertificateDetails: 

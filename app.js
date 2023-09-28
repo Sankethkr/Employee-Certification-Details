@@ -10,7 +10,7 @@ const { marshall, unmarshall } = require('@aws-sdk/util-dynamodb');
 
 const client = new DynamoDBClient();
 
-const getCertificateDetail = async (event) => {
+const getAllCertificates = async (event) => {
   const response = { statusCode: 200 };
   try {
     const params = {
@@ -129,7 +129,7 @@ const getCertificateDetail = async (event) => {
 //   return response;
 // };
 
-const getEmployeeCertificate = async () => {
+const getCertificate = async () => {
   const response = { statusCode: 200 };
   try {
     const { Items } = await client.send(
@@ -153,6 +153,6 @@ const getEmployeeCertificate = async () => {
 };
 
 module.exports = {
-  getCertificateDetail,
-  getEmployeeCertificate,
+  getAllCertificates,
+  getCertificate,
 };
