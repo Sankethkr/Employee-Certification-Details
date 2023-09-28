@@ -26,7 +26,7 @@ functions:
           - "dynamodb:GetItem"
         Resource: !GetAtt EmployCertificate.Arn
   getDetail:
-    handler: api.getCertificate
+    handler: app.getCertificate
     name: get-Certificate
     memorySize: 128 # mb
     timeout: 5 # seconds
