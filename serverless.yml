@@ -1,0 +1,56 @@
+service: Employe-Certification-Get-API
+provider:
+  name: aws
+  region: ap-south-1
+  runtime: nodejs18.x
+  stage: dev
+  environment:
+    DYNAMODB_TABLE_NAME: ${self:custonm.EmployeCertificationTable}
+custom:
+  EmployeCertificationTable: EmployeeDetailsTable
+plugins:
+  - serverless-iam-roles-per-function
+functions: 
+  getCertificateDetails:
+    handler: app.getEmployeeCertificate
+    name: get-EmployeeCertificate
+    memorySize: 128 #mb
+    timeout: 5 # seconds
+    events:
+      - http:
+          path: employees
+          method: GET
+    iamRoleStatements: 
+      - Effect: "Allow"
+        Action: 
+          - "dynamodb:GetItem"
+        Resource: !GetAtt EmployCertificateDetails.Arn
+  getDetail:
+    handler: api.getCertificateDetail
+    name: get-CertificateDetail
+    memorySize: 128 # mb
+    timeout: 5 # seconds
+    events:
+      - http:
+          path: employee/{empID}
+          method: GET
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:GetItem"
+        Resource: !GetAtt EmployCertificateDetails.Arn
+resources: 
+  Resources:
+    EmployCertificateDetails: 
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custonm.EmployeCertificationTable}
+        AttributeDefinitions:
+          - AttributeName: empID
+            AttributeType: S
+        KeySchema: 
+         - AttributeName: empID
+           KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
