@@ -44,7 +44,7 @@ resources:
     EmployCertificateDetails: 
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:custonm.EmployeCertificationTable}
+        TableName: ${self:custom.EmployeCertificationTable}
         AttributeDefinitions:
           - AttributeName: empID
             AttributeType: S
