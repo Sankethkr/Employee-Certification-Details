@@ -41,7 +41,7 @@ functions:
         Resource: !GetAtt EmployCertificate.Arn
 resources: 
   Resources:
-    EmployCertificateDetails: 
+    EmployCertificate: 
       Type: AWS::DynamoDB::Table
       Properties:
         TableName: ${self:custom.EmployeCertificationTable}
