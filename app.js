@@ -25,7 +25,7 @@ const getCertificate = async (event) => {
     const { Item } = await client.send(new GetItemCommand(params));
     response.body = JSON.stringify({
       message: 'Successfully retrieved post.',
-      // data: Item ? unmarshall(Item) : {},
+      data: Item ? unmarshall(Item) : {},
       rawData: Item,
     });
   } catch (e) {
