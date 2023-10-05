@@ -33,7 +33,7 @@ functions:
     timeout: 5 # seconds
     events:
       - http:
-          path: employee/{empID}
+          path: employee/{empId}
           method: GET
     iamRoleStatements:
       - Effect: "Allow"
@@ -48,10 +48,10 @@ resources:
       Properties:
         TableName: ${self:custom.EmployeCertificationTable}
         AttributeDefinitions:
-          - AttributeName: empID
+          - AttributeName: empId
             AttributeType: S
         KeySchema: 
-         - AttributeName: empID
+         - AttributeName: empId
            KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1

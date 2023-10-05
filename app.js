@@ -1,10 +1,7 @@
 const {
   DynamoDBClient,
   GetItemCommand,
-  PutItemCommand,
-  DeleteItemCommand,
   ScanCommand,
-  UpdateItemCommand,
 } = require('@aws-sdk/client-dynamodb');
 const { marshall, unmarshall } = require('@aws-sdk/util-dynamodb');
 
@@ -13,14 +10,14 @@ const client = new DynamoDBClient();
 const getCertificate = async (event) => {
   const response = { statusCode: 200 };
   try {
-    // Check if empID is defined in event.pathParameters
-    if (!event.pathParameters || !event.pathParameters.empID) {
-      throw new Error('empID is missing in the path parameters');
+    // Check if empId is defined in event.pathParameters
+    if (!event.pathParameters || !event.pathParameters.empId) {
+      throw new Error('empId is missing in the path parameters');
     }
 
     const params = {
       TableName: process.env.DYNAMODB_TABLE_NAME,
-      Key: marshall({ empID: event.pathParameters.empID }),
+      Key: marshall({ empId: event.pathParameters.empId }),
     };
     const { Item } = await client.send(new GetItemCommand(params));
     response.body = JSON.stringify({
@@ -48,7 +45,7 @@ const getAllCertificates = async () => {
     );
     response.body = JSON.stringify({
       message: 'Successfully retrieved all Certificates',
-      data: Items.map((item) => unmarshall(item)),
+      data: Items?.map((item) => unmarshall(item)),
       Items,
     });
   } catch (e) {
