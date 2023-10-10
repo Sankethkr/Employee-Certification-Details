@@ -20,7 +20,7 @@ try {
       Key: marshall({ empID: event.pathParameters.empID }),
     };
     const { Item } = await client.send(new GetItemCommand(params));
-    console.log('Item', Item);
+    console.log('Item', JSON.stringify(Item, null, 2));
 
     response.body = JSON.stringify({
       message: `Successfully retrieved empId: ${event.pathParameters.empID}`,
