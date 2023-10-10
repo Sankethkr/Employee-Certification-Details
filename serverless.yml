@@ -11,30 +11,20 @@ custom:
 plugins:
   - serverless-iam-roles-per-function
 functions: 
-  getCertificates:
-    handler: app.getAllCertificates
-    name: get-AllCertificate
-    memorySize: 128 #mb
-    timeout: 5 # seconds
-    events:
-      - http:
-          path: employees
-          method: GET
-    iamRoleStatements: 
-      - Effect: "Allow"
-        Action: 
-          - "dynamodb:GetItem"
-          - "dynamodb:Scan"  # Add this line to grant Scan permission
-        Resource: !GetAtt EmployCertificate.Arn
   getDetail:
-    handler: app.getCertificate
-    name: get-Certificate
+    handler: app.getCertificates
+    name: get-Certificates
     memorySize: 128 # mb
     timeout: 5 # seconds
     events:
       - http:
-          path: employee/{empId}
+          path: employee/{empID}
           method: GET
+          cors: true
+      - http:
+          method: GET
+          path: employees
+          cors: true    
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -48,10 +38,10 @@ resources:
       Properties:
         TableName: ${self:custom.EmployeCertificationTable}
         AttributeDefinitions:
-          - AttributeName: empId
+          - AttributeName: empID
             AttributeType: S
         KeySchema: 
-         - AttributeName: empId
+         - AttributeName: empID
            KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1
