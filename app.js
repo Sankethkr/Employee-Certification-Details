@@ -47,6 +47,7 @@ try {
     errorStack: e.stack,
     statusCode: e.$metadata.httpStatusCode,
   });
+  console.log(response.body);
 }
 
   return response;
