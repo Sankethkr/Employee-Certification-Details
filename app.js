@@ -2,7 +2,8 @@
 const {
   DynamoDBClient, //creating of instance of dynamoDB
   GetItemCommand, //fetch the Item details in dynamoDB
-  ScanCommand, //scan the database
+  ScanCommand, //scan the
+  UpdateItemCommand, // for updating data
 } = require('@aws-sdk/client-dynamodb');
 const { marshall, unmarshall } = require('@aws-sdk/util-dynamodb'); // retrieve and store
 
