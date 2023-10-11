@@ -113,7 +113,7 @@ const softDeleteEmployeeSkillInfo = async (event) => {
       UpdateExpression: 'SET skillInfoDetails[0].isActive = :isActive',
       ExpressionAttributeValues: {
         // Set to true to update "isActive" to true
-        ':isActive': true,
+        ':isActive': { BOOL: true },
       },
     };
 
