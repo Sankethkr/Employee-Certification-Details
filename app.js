@@ -70,7 +70,7 @@ const deleteEmployeeSkillInfo = async (event) => {
       // Table name
       TableName: process.env.DYNAMODB_TABLE_NAME,
       Key: marshall({ empID }),
-      UpdateExpression: 'SET bankInfoDetails = :emptyList',
+      UpdateExpression: 'SET skillInfoDetails = :emptyList',
       ExpressionAttributeValues: {
         ':emptyList': emptyList, //
       },
@@ -113,7 +113,7 @@ const softDeleteEmployeeSkillInfo = async (event) => {
       UpdateExpression: 'SET skillInfoDetails[0].isActive = :isActive',
       ExpressionAttributeValues: {
         // Set to true to update "isActive" to true
-        ':isActive': { BOOL: true },
+        ':isActive': true,
       },
     };
 
