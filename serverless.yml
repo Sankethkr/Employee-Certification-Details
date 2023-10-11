@@ -41,7 +41,7 @@ functions:
           path: employee/{empID}
           method: DELETE
           cors: true
-    iamRoleStaments: 
+    iamRoleStatements: 
       - Effect: "Allow"
         Action: 
           - "dynamodb:DeleteItem"
@@ -57,7 +57,7 @@ functions:
           path: employee/{empID}/softDelete
           method: DELETE
           cors: true
-    iamRoleStaments: 
+    iamRoleStatements: 
       - Effect: "Allow"
         Action: 
           - "dynamodb:UpdateItem"
