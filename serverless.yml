@@ -45,6 +45,7 @@ functions:
       - Effect: "Allow"
         Action: 
           - "dynamodb:DeleteItem"
+          - "dynamodb:UpdateItem"
         Resource: !GetAtt EmployCertificate.Arn
   softDeleteSkillInfo: 
     handler: app.softDeleteEmployeeSkillInfo
@@ -60,6 +61,7 @@ functions:
       - Effect: "Allow"
         Action: 
           - "dynamodb:UpdateItem"
+          - "dynamodb:DeleteItem"
         Resource: !GetAtt EmployCertificate.Arn
 resources: 
   Resources:
