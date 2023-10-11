@@ -31,6 +31,36 @@ functions:
           - "dynamodb:GetItem"
           - "dynamodb:Scan"  # Add this line to grant Scan permission
         Resource: !GetAtt EmployCertificate.Arn
+  deleteSkillInfo: 
+    handler: app.deleteEmployeeSkillInfo
+    name: delete-EmployeeSkillInfo
+    memorySize: 128
+    timeout: 5
+    events:
+      - http:
+          path: employee/{empID}
+          method: DELETE
+          cors: true
+    iamRoleStaments: 
+      - Effect: "Allow"
+        Action: 
+          - "dynamodb:DeleteItem"
+        Resource: !GetAtt EmployCertificate.Arn
+  softDeleteSkillInfo: 
+    handler: app.softDeleteEmployeeSkillInfo
+    name: soft-delete-EmployeeSkillInfo
+    memorySize: 128
+    timeout: 5
+    events:
+      - http:
+          path: employee/{empID}/softDelete
+          method: DELETE
+          cors: true
+    iamRoleStaments: 
+      - Effect: "Allow"
+        Action: 
+          - "dynamodb:UpdateItem"
+        Resource: !GetAtt EmployCertificate.Arn
 resources: 
   Resources:
     EmployCertificate: 
