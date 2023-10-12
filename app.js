@@ -2,7 +2,7 @@
 const {
   DynamoDBClient, //creating of instance of dynamoDB
   GetItemCommand, //fetch the Item details in dynamoDB
-  ScanCommand, //scan the
+  ScanCommand, //scan the Item details in dynamoDB
   UpdateItemCommand, // for updating data
 } = require('@aws-sdk/client-dynamodb');
 const { marshall, unmarshall } = require('@aws-sdk/util-dynamodb'); // retrieve and store
@@ -43,11 +43,11 @@ const getCertificates = async (event) => {
     }
   } catch (e) {
     console.error(e);
+    response.statusCode = 500;
     response.body = JSON.stringify({
       message: 'Failed to get certificates.',
       errorMsg: e.message,
       errorStack: e.stack,
-      statusCode: e.$metadata.httpStatusCode,
     });
     console.log(response.body);
   }
@@ -76,12 +76,12 @@ const deleteEmployeeSkillInfo = async (event) => {
       },
     };
 
-    // Use the update method with UpdateExpression to set bankInfoDetails to an empty list
+    // Use the update method with UpdateExpression to set skillInfoDetails to an empty list
     const updateResult = await client.send(new UpdateItemCommand(params));
 
     // convert raw data response from server to JSON string format
     response.body = JSON.stringify({
-      message: `Successfully deleted employeeId bank Details.`,
+      message: `Successfully deleted empID Skill Details.`,
       updateResult,
     });
   } catch (e) {
@@ -89,7 +89,7 @@ const deleteEmployeeSkillInfo = async (event) => {
     response.statusCode = 500;
     // convert raw data response from server to JSON string format
     response.body = JSON.stringify({
-      message: `Failed to delete employeeId bank Details.`,
+      message: `Failed to delete empID Skill Details.`,
       errorMsg: e.message,
       errorStack: e.stack,
     });
@@ -109,7 +109,7 @@ const softDeleteEmployeeSkillInfo = async (event) => {
       TableName: process.env.DYNAMODB_TABLE_NAME,
       // passing marshalled employeeId value
       Key: marshall({ empID }),
-      // update expression for isActive property which present in bankInfoDetails
+      // update expression for isActive property which present in skillInfoDetails
       UpdateExpression: 'SET skillInfoDetails[0].isActive = :isActive',
       ExpressionAttributeValues: {
         // Set to true to update "isActive" to true
@@ -122,7 +122,7 @@ const softDeleteEmployeeSkillInfo = async (event) => {
 
     // response body values
     response.body = JSON.stringify({
-      message: `Successfully soft deleted employeeId bank Details.`,
+      message: `Successfully soft deleted empID Skill Details.`,
       updateResult,
     });
   } catch (e) {
@@ -130,7 +130,7 @@ const softDeleteEmployeeSkillInfo = async (event) => {
     console.error(e);
     response.statusCode = 500;
     response.body = JSON.stringify({
-      message: `Failed to soft delete employeeId bank Details.`,
+      message: `Failed to soft delete empID Skill Details.`,
       errorMsg: e.message,
       errorStack: e.stack,
     });
@@ -145,3 +145,4 @@ module.exports = {
   deleteEmployeeSkillInfo,
   softDeleteEmployeeSkillInfo,
 };
+
