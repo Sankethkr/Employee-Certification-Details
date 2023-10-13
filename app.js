@@ -111,9 +111,8 @@ const softDeleteEmployeeSkillInfo = async (event) => {
       // passing marshalled employeeId value
       Key: marshall({ empID }),
       // update expression for isActive property which present in skillInfoDetails
-      UpdateExpression: 'SET skillInfoDetails[0].isActive = :isActive',
       UpdateExpression:
-        'SET skillInfoDetails[0].UpdatedDateTime = :UpdatedDateTime',
+        'SET skillInfoDetails[0].isActive = :isActive, skillInfoDetails[0].UpdatedDateTime = :UpdatedDateTime',
       ExpressionAttributeValues: {
         // Set to true to update "isActive" to true
         ':isActive': { BOOL: true },
