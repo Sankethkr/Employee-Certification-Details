@@ -100,6 +100,7 @@ const deleteEmployeeSkillInfo = async (event) => {
 
 const softDeleteEmployeeSkillInfo = async (event) => {
   // set 200 response
+  const date = new Date().toISOString();
   const response = { statusCode: 200 };
   try {
     const { empID } = event.pathParameters;
@@ -111,9 +112,12 @@ const softDeleteEmployeeSkillInfo = async (event) => {
       Key: marshall({ empID }),
       // update expression for isActive property which present in skillInfoDetails
       UpdateExpression: 'SET skillInfoDetails[0].isActive = :isActive',
+      UpdateExpression:
+        'SET skillInfoDetails[0].UpdatedDateTime = :UpdatedDateTime',
       ExpressionAttributeValues: {
         // Set to true to update "isActive" to true
         ':isActive': { BOOL: true },
+        ':UpdatedDateTime': { S: date },
       },
     };
 
