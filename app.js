@@ -118,23 +118,6 @@ const softDeleteEmployeeSkillInfo = async (event) => {
         ':isActive': { BOOL: true },
         ':UpdatedDateTime': { S: date },
       },
-      ConditionExpression:
-        'attribute_not_exists(skillInfoDetails[0].isActive) OR skillInfoDetails[0].isActive = :false',
-      ExpressionAttributeValues: {
-        ':false': { BOOL: false },
-      },
-      catch(error) {
-        // Handle any errors here, including conditional check errors.
-        console.error(error);
-
-        if (error.code === 'ConditionalCheckFailedException') {
-          // Customize the error message to indicate that the skill is already active.
-          response.statusCode = 400;
-          response.body = JSON.stringify({
-            error: 'This skill is already active.',
-          });
-        }
-      },
     };
 
     // sending params to dynamoDb
