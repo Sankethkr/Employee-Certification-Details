@@ -10,7 +10,7 @@ custom:
   EmployeCertificationTable: EmployeeDetailsTable
 plugins:
   - serverless-iam-roles-per-function
-functions: 
+functions:
   getDetail:
     handler: app.getCertificates
     name: get-Certificates
@@ -29,9 +29,10 @@ functions:
       - Effect: "Allow"
         Action:
           - "dynamodb:GetItem"
-          - "dynamodb:Scan"  # Add this line to grant Scan permission
+          - "dynamodb:Scan"
         Resource: !GetAtt EmployCertificate.Arn
-  deleteSkillInfo: 
+
+  deleteSkillInfo:
     handler: app.handleEmployeeSkillInfo
     name: handle-EmployeeSkillInfo
     memorySize: 128
@@ -41,13 +42,13 @@ functions:
           path: employee/{empID}
           method: DELETE
           cors: true
-      - http: 
-           path: employee/{empID}/softDelete
-           method: DELETE
-           cors: true  
-    iamRoleStatements: 
+      - http:
+          path: employee/{empID}/softDelete
+          method: DELETE
+          cors: true
+    iamRoleStatements:
       - Effect: "Allow"
-        Action: 
+        Action:
           - "dynamodb:DeleteItem"
           - "dynamodb:UpdateItem"
         Resource: !GetAtt EmployCertificate.Arn
