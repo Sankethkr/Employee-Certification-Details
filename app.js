@@ -6,8 +6,6 @@ const {
   UpdateItemCommand, // for updating data
 } = require('@aws-sdk/client-dynamodb');
 const { marshall, unmarshall } = require('@aws-sdk/util-dynamodb'); // retrieve and store
-const swaggerHJsDoc = require('swagger-jsdoc');
-const swaggerUi = require('swagger-ui-dist');
 
 //creating constant client(instance) of dynamoDB and called in the program
 const client = new DynamoDBClient();
