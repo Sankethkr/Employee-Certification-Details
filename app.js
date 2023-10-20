@@ -122,6 +122,7 @@ const softDeleteEmployeeSkillInfo = async (event) => {
 
     // sending params to dynamoDb
     const updateResult = await client.send(new UpdateItemCommand(params));
+    console.log('updateResult', updateResult);
 
     // response body values
     response.body = JSON.stringify({
