@@ -1,20 +1,24 @@
+//This program is to retrieve the certification details of employee by empId and all records
 const {
-  DynamoDBClient,
-  GetItemCommand,
-  ScanCommand,
-  UpdateItemCommand,
+  DynamoDBClient, //creating of instance of dynamoDB
+  GetItemCommand, //fetch the Item details in dynamoDB
+  ScanCommand, //scan the Item details in dynamoDB
+  UpdateItemCommand, // for updating data
 } = require('@aws-sdk/client-dynamodb');
-const { marshall, unmarshall } = require('@aws-sdk/util-dynamodb');
+const { marshall, unmarshall } = require('@aws-sdk/util-dynamodb'); // retrieve and store
+const swaggerHJsDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-dist');
 
+//creating constant client(instance) of dynamoDB and called in the program
 const client = new DynamoDBClient();
 
 const getCertificates = async (event) => {
   const response = { statusCode: 200 };
   console.log('event', event);
-
+  console.log('response', response);
   try {
     if (event.pathParameters && event.pathParameters.empID) {
-      // Retrieve a specific certificate by empID
+      // If empID is provided in the path parameters, retrieve a specific certificate
       const params = {
         TableName: process.env.DYNAMODB_TABLE_NAME,
         Key: marshall({ empID: event.pathParameters.empID }),
@@ -28,7 +32,7 @@ const getCertificates = async (event) => {
         rawData: Item,
       });
     } else {
-      // Retrieve all certificates
+      // If empID is not provided, retrieve all certificates
       const { Items } = await client.send(
         new ScanCommand({ TableName: process.env.DYNAMODB_TABLE_NAME })
       );
@@ -47,64 +51,102 @@ const getCertificates = async (event) => {
       errorMsg: e.message,
       errorStack: e.stack,
     });
+    console.log(response.body);
   }
 
   return response;
 };
 
-const handleEmployeeSkillInfo = async (event) => {
+const deleteEmployeeSkillInfo = async (event) => {
+  // defined const response and store the status code of 200
   const response = { statusCode: 200 };
-  const date = new Date().toISOString();
-
+  // try block will examine employeeId in DB and if found it will delete otherwise it will throw error
   try {
-    const { empID, action } = event.pathParameters;
+    const { empID } = event.pathParameters;
 
+    // Create an empty DynamoDB List attribute after delete perform
+    const emptyList = { L: [] };
+
+    // created const params and refered in program to proccess employeeId update
     const params = {
+      // Table name
       TableName: process.env.DYNAMODB_TABLE_NAME,
       Key: marshall({ empID }),
+      UpdateExpression: 'SET skillInfoDetails = :emptyList',
+      ExpressionAttributeValues: {
+        ':emptyList': emptyList, //
+      },
     };
 
-    if (action === 'delete') {
-      const emptyList = { L: [] };
-      params.UpdateExpression = 'SET skillInfoDetails = :emptyList';
-      params.ExpressionAttributeValues = { ':emptyList': emptyList };
-    } else if (action === 'softDelete') {
-      params.UpdateExpression =
-        'SET skillInfoDetails[0].isActive = :isActive, skillInfoDetails[0].UpdatedDateTime = :UpdatedDateTime';
-      params.ExpressionAttributeValues = {
-        ':isActive': { BOOL: true },
-        ':UpdatedDateTime': { S: date },
-      };
-    } else {
-      response.statusCode = 400;
-      response.body = JSON.stringify({ message: 'Invalid action specified' });
-      return response;
-    }
-
+    // Use the update method with UpdateExpression to set skillInfoDetails to an empty list
     const updateResult = await client.send(new UpdateItemCommand(params));
 
+    // convert raw data response from server to JSON string format
     response.body = JSON.stringify({
-      message: `Successfully ${
-        action === 'delete' ? 'deleted' : 'soft deleted'
-      } empID Skill Details`,
+      message: `Successfully deleted empID Skill Details`,
       updateResult,
     });
   } catch (e) {
     console.error(e);
     response.statusCode = 500;
+    // convert raw data response from server to JSON string format
     response.body = JSON.stringify({
-      message: `Failed to ${
-        action === 'delete' ? 'delete' : 'soft delete'
-      } empID Skill Details`,
+      message: `Failed to delete empID Skill Details`,
       errorMsg: e.message,
       errorStack: e.stack,
     });
   }
-
+  // returns the response 200
   return response;
 };
 
+const softDeleteEmployeeSkillInfo = async (event) => {
+  // set 200 response
+  const date = new Date().toISOString();
+  const response = { statusCode: 200 };
+  try {
+    const { empID } = event.pathParameters;
+    // writing params
+    const params = {
+      // table name
+      TableName: process.env.DYNAMODB_TABLE_NAME,
+      // passing marshalled employeeId value
+      Key: marshall({ empID }),
+      // update expression for isActive property which present in skillInfoDetails
+      UpdateExpression:
+        'SET skillInfoDetails[0].isActive = :isActive, skillInfoDetails[0].UpdatedDateTime = :UpdatedDateTime',
+      ExpressionAttributeValues: {
+        // Set to true to update "isActive" to true
+        ':isActive': { BOOL: true },
+        ':UpdatedDateTime': { S: date },
+      },
+    };
+
+    // sending params to dynamoDb
+    const updateResult = await client.send(new UpdateItemCommand(params));
+
+    // response body values
+    response.body = JSON.stringify({
+      message: `Successfully soft deleted empID Skill Details`,
+      updateResult,
+    });
+  } catch (e) {
+    // error handling block for 500 error satus
+    console.error(e);
+    response.statusCode = 500;
+    response.body = JSON.stringify({
+      message: `Failed to soft delete empID Skill Details`,
+      errorMsg: e.message,
+      errorStack: e.stack,
+    });
+  }
+  // returns the response
+  return response;
+};
+
+//exports methods globally
 module.exports = {
   getCertificates,
-  handleEmployeeSkillInfo,
+  deleteEmployeeSkillInfo,
+  softDeleteEmployeeSkillInfo,
 };
