@@ -24,7 +24,7 @@ functions:
       - http:
           method: GET
           path: employees
-          cors: true    
+          cors: true
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -32,8 +32,8 @@ functions:
           - "dynamodb:Scan"  # Add this line to grant Scan permission
         Resource: !GetAtt EmployCertificate.Arn
   deleteSkillInfo: 
-    handler: app.deleteEmployeeSkillInfo
-    name: delete-EmployeeSkillInfo
+    handler: app.handleEmployeeSkillInfo
+    name: handle-EmployeeSkillInfo
     memorySize: 128
     timeout: 5
     events:
@@ -41,27 +41,15 @@ functions:
           path: employee/{empID}
           method: DELETE
           cors: true
+      - http: 
+           path: employee/{empID}/softDelete
+           method: DELETE
+           cors: true  
     iamRoleStatements: 
       - Effect: "Allow"
         Action: 
           - "dynamodb:DeleteItem"
           - "dynamodb:UpdateItem"
-        Resource: !GetAtt EmployCertificate.Arn
-  softDeleteSkillInfo: 
-    handler: app.softDeleteEmployeeSkillInfo
-    name: soft-delete-EmployeeSkillInfo
-    memorySize: 128
-    timeout: 5
-    events:
-      - http:
-          path: employee/{empID}/softDelete
-          method: DELETE
-          cors: true
-    iamRoleStatements: 
-      - Effect: "Allow"
-        Action: 
-          - "dynamodb:UpdateItem"
-          - "dynamodb:DeleteItem"
         Resource: !GetAtt EmployCertificate.Arn
 resources: 
   Resources:
